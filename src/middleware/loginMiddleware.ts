@@ -5,54 +5,33 @@ import { loginSuccess, loginFailure } from '../actions/login/loginActions';
 import { Dispatch } from 'redux';
 import { LoginActionsEnum } from '../actions/actionsIndex';
 import { LoginAction } from '../actions/login/loginActionTypes';
-import { ErrorResponse } from './middlewareTypes';
 import { AppStore } from '../store';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 
-// Local types
-interface LoginResponse {
-  message: string;
-  admin: {
-    id: number;
-    username: string;
-  };
-  token: string;
-}
 
 const loginMiddleware =
   (store: AppStore) =>
-  (next: Dispatch<LoginAction>) =>
-  async (action: LoginAction) => {
-    switch (action.type) {
-      case LoginActionsEnum.POST_LOGIN_FORM: {
-        try {
-          const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/admin/login`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                username: store.getState().login.usernameInput,
-                password: store.getState().login.passwordInput,
-              }),
-            },
-          );
-          if (!response.ok) {
-            const error: ErrorResponse = await response.json();
-            store.dispatch(loginFailure(error.errors));
-            throw new Error(error.errors.join(', '));
+    (next: Dispatch<LoginAction>) =>
+      async (action: LoginAction) => {
+        switch (action.type) {
+          case LoginActionsEnum.POST_LOGIN_FORM: {
+            try {
+              const email = store.getState().login.usernameInput;
+              const password = store.getState().login.passwordInput;
+              const userCredential = await signInWithEmailAndPassword(auth, email, password);
+              const user = userCredential.user;
+              const token = await user.getIdToken();
+              store.dispatch(loginSuccess(1, token));
+            } catch (error: any) {
+              const errorMessage = error.message ? [error.message] : ['Login failed.'];
+              store.dispatch(loginFailure(errorMessage));
+            }
+            break;
           }
-          const data: LoginResponse = await response.json();
-          store.dispatch(loginSuccess(data.admin.id, data.token));
-        } catch (error: unknown) {
-          console.error(error);
+          default:
         }
-        break;
-      }
-      default:
-    }
-    return next(action);
-  };
+        return next(action);
+      };
 
 export default loginMiddleware;
