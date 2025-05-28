@@ -60,7 +60,7 @@ const BoCarousel = () => {
               <BoCarouselCard
                 key={picture.id}
                 id={picture.id}
-                url={`/api/${picture.url}`}
+                url={`/static/${picture.url}`}
                 position={position}
               />
             );
