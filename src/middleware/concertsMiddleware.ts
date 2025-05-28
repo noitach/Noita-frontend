@@ -17,171 +17,171 @@ import { ConcertForm } from '../reducers/concertsReducer';
 
 const concertsMiddleware =
   (store: AppStore) =>
-  (next: Dispatch<ConcertAction>) =>
-  async (action: ConcertAction) => {
-    switch (action.type) {
-      case ConcertActionsEnum.FETCH_CONCERT_LIST: {
-        try {
-          const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/concerts`,
-          );
-
-          if (!response.ok) {
-            const error: ErrorResponse = await response.json();
-            throw new Error(error.errors.join(', '));
-          }
-          const data: Concert[] = await response.json();
-          store.dispatch(storeConcertList(data));
-        } catch (error: unknown) {
-          console.error(error);
-        }
-        break;
-      }
-
-      case ConcertActionsEnum.FETCH_CONCERT_DETAILS: {
-        try {
-          const user_id: number | null = store.getState().login.loggedId;
-          const token: string = store.getState().login.token;
-          const concert_id: number = action.concertId;
-
-          const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/concerts/${concert_id}?user_id=${user_id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            },
-          );
-
-          if (!response.ok) {
-            const error: ErrorResponse = await response.json();
-            if (error.status === 401) {
-              store.dispatch(logout());
-              store.dispatch(
-                loginFailure(['The session has expired, please log in again.']),
+    (next: Dispatch<ConcertAction>) =>
+      async (action: ConcertAction) => {
+        switch (action.type) {
+          case ConcertActionsEnum.FETCH_CONCERT_LIST: {
+            try {
+              const response: Response = await fetch(
+                `/api/concerts`,
               );
+
+              if (!response.ok) {
+                const error: ErrorResponse = await response.json();
+                throw new Error(error.errors.join(', '));
+              }
+              const data: Concert[] = await response.json();
+              store.dispatch(storeConcertList(data));
+            } catch (error: unknown) {
+              console.error(error);
             }
-            throw new Error(error.errors.join(', '));
+            break;
           }
-          const data: Concert = await response.json();
-          store.dispatch(storeConcertDetails(data));
-        } catch (error: unknown) {
-          console.error(error);
-        }
-        break;
-      }
 
-      case ConcertActionsEnum.POST_ADD_CONCERT_FORM: {
-        try {
-          const user_id: number | null = store.getState().login.loggedId;
-          const token: string = store.getState().login.token;
-          const form: ConcertForm = store.getState().concerts.form;
+          case ConcertActionsEnum.FETCH_CONCERT_DETAILS: {
+            try {
+              const user_id: number | null = store.getState().login.loggedId;
+              const token: string = store.getState().login.token;
+              const concert_id: number = action.concertId;
 
-          const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/concerts?user_id=${user_id}`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify(form),
-            },
-          );
-          if (!response.ok) {
-            const error: ErrorResponse = await response.json();
-            if (error.status === 401) {
-              store.dispatch(logout());
-              store.dispatch(
-                loginFailure(['The session has expired, please log in again.']),
+              const response: Response = await fetch(
+                `/api/concerts/${concert_id}?user_id=${user_id}`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                },
               );
-              throw new Error(error.errors.join(', '));
+
+              if (!response.ok) {
+                const error: ErrorResponse = await response.json();
+                if (error.status === 401) {
+                  store.dispatch(logout());
+                  store.dispatch(
+                    loginFailure(['The session has expired, please log in again.']),
+                  );
+                }
+                throw new Error(error.errors.join(', '));
+              }
+              const data: Concert = await response.json();
+              store.dispatch(storeConcertDetails(data));
+            } catch (error: unknown) {
+              console.error(error);
             }
-            store.dispatch(concertFailure(error.errors));
-            throw new Error(error.errors.join(', '));
+            break;
           }
-          action.navigate('/admin/concerts');
-        } catch (error: unknown) {
-          console.error(error);
-        }
-        break;
-      }
 
-      case ConcertActionsEnum.POST_EDIT_CONCERT_FORM: {
-        try {
-          const user_id: number | null = store.getState().login.loggedId;
-          const token: string = store.getState().login.token;
-          const form: ConcertForm = store.getState().concerts.form;
-          const concert_id: number | undefined =
-            store.getState().concerts.concertDetails?.id;
+          case ConcertActionsEnum.POST_ADD_CONCERT_FORM: {
+            try {
+              const user_id: number | null = store.getState().login.loggedId;
+              const token: string = store.getState().login.token;
+              const form: ConcertForm = store.getState().concerts.form;
 
-          const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/concerts/${concert_id}?user_id=${user_id}`,
-            {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify(form),
-            },
-          );
-          if (!response.ok) {
-            const error: ErrorResponse = await response.json();
-            if (error.status === 401) {
-              store.dispatch(logout());
-              store.dispatch(
-                loginFailure(['The session has expired, please log in again.']),
+              const response: Response = await fetch(
+                `/api/concerts?user_id=${user_id}`,
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                  },
+                  body: JSON.stringify(form),
+                },
               );
-              throw new Error(error.errors.join(', '));
+              if (!response.ok) {
+                const error: ErrorResponse = await response.json();
+                if (error.status === 401) {
+                  store.dispatch(logout());
+                  store.dispatch(
+                    loginFailure(['The session has expired, please log in again.']),
+                  );
+                  throw new Error(error.errors.join(', '));
+                }
+                store.dispatch(concertFailure(error.errors));
+                throw new Error(error.errors.join(', '));
+              }
+              action.navigate('/admin/concerts');
+            } catch (error: unknown) {
+              console.error(error);
             }
-            store.dispatch(concertFailure(error.errors));
-            throw new Error(error.errors.join(', '));
+            break;
           }
-          action.navigate('/admin/concerts');
-        } catch (error: unknown) {
-          console.error(error);
-        }
-        break;
-      }
 
-      case ConcertActionsEnum.DELETE_CONCERT: {
-        try {
-          const user_id: number | null = store.getState().login.loggedId;
-          const token: string = store.getState().login.token;
-          const concert_id: number = action.concertId;
+          case ConcertActionsEnum.POST_EDIT_CONCERT_FORM: {
+            try {
+              const user_id: number | null = store.getState().login.loggedId;
+              const token: string = store.getState().login.token;
+              const form: ConcertForm = store.getState().concerts.form;
+              const concert_id: number | undefined =
+                store.getState().concerts.concertDetails?.id;
 
-          const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/concerts/${concert_id}?user_id=${user_id}`,
-            {
-              method: 'DELETE',
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            },
-          );
-          if (!response.ok) {
-            const error: ErrorResponse = await response.json();
-            if (error.status === 401) {
-              store.dispatch(logout());
-              store.dispatch(
-                loginFailure(['The session has expired, please log in again.']),
+              const response: Response = await fetch(
+                `/api/concerts/${concert_id}?user_id=${user_id}`,
+                {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                  },
+                  body: JSON.stringify(form),
+                },
               );
-              throw new Error(error.errors.join(', '));
+              if (!response.ok) {
+                const error: ErrorResponse = await response.json();
+                if (error.status === 401) {
+                  store.dispatch(logout());
+                  store.dispatch(
+                    loginFailure(['The session has expired, please log in again.']),
+                  );
+                  throw new Error(error.errors.join(', '));
+                }
+                store.dispatch(concertFailure(error.errors));
+                throw new Error(error.errors.join(', '));
+              }
+              action.navigate('/admin/concerts');
+            } catch (error: unknown) {
+              console.error(error);
             }
-            store.dispatch(concertFailure(error.errors));
-            throw new Error(error.errors.join(', '));
+            break;
           }
-          store.dispatch(fetchConcertList());
-        } catch (error: unknown) {
-          console.error(error);
-        }
-        break;
-      }
 
-      default:
-    }
-    return next(action);
-  };
+          case ConcertActionsEnum.DELETE_CONCERT: {
+            try {
+              const user_id: number | null = store.getState().login.loggedId;
+              const token: string = store.getState().login.token;
+              const concert_id: number = action.concertId;
+
+              const response: Response = await fetch(
+                `/api/concerts/${concert_id}?user_id=${user_id}`,
+                {
+                  method: 'DELETE',
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                },
+              );
+              if (!response.ok) {
+                const error: ErrorResponse = await response.json();
+                if (error.status === 401) {
+                  store.dispatch(logout());
+                  store.dispatch(
+                    loginFailure(['The session has expired, please log in again.']),
+                  );
+                  throw new Error(error.errors.join(', '));
+                }
+                store.dispatch(concertFailure(error.errors));
+                throw new Error(error.errors.join(', '));
+              }
+              store.dispatch(fetchConcertList());
+            } catch (error: unknown) {
+              console.error(error);
+            }
+            break;
+          }
+
+          default:
+        }
+        return next(action);
+      };
 
 export default concertsMiddleware;
