@@ -34,7 +34,7 @@ const Carousel = () => {
 
   const images = pictures.map((picture) => {
     return {
-      original: `${import.meta.env.VITE_URL}${picture.url}`,
+      original: `${picture.url}`,
     };
   });
 
