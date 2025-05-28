@@ -15,7 +15,7 @@
         }
       },
       {
-        "source": "/static/**",
+        "source": "/images/**",
         "run": {
           "serviceId": "noita-backend",
           "region": "europe-west1"

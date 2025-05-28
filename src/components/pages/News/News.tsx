@@ -62,7 +62,7 @@ const News = () => {
               title={language === 'fr' ? post.title_fr : post.title_de}
               date={language === 'fr' ? dateFr : dateDe}
               content={language === 'fr' ? post.content_fr : post.content_de}
-              urlImage={`/static/${post.image_url}`}
+              urlImage={`${post.image_url}`}
             />
           );
         })}
