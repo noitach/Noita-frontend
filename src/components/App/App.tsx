@@ -13,7 +13,9 @@ const Home = lazy(() => import('../pages/Home/Home'));
 const News = lazy(() => import('../pages/News/News'));
 const BoHome = lazy(() => import('../pages/BoHome/BoHome'));
 const BoConcerts = lazy(() => import('../pages/BoConcerts/BoConcerts'));
-const BoConcertsForm = lazy(() => import('../pages/BoConcertsForm/BoConcertsForm'));
+const BoConcertsForm = lazy(
+  () => import('../pages/BoConcertsForm/BoConcertsForm'),
+);
 const BoNews = lazy(() => import('../pages/BoNews/BoNews'));
 const BoNewsForm = lazy(() => import('../pages/BoNewsForm/BoNewsForm'));
 const BoCarousel = lazy(() => import('../pages/BoCarousel/BoCarousel'));
