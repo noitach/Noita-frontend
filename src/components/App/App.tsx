@@ -2,19 +2,22 @@
 import { Route, Routes } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useSelector } from 'react-redux';
+import { lazy, Suspense } from 'react';
 
 // Types
 import { RootState } from '../../reducers/indexReducer';
 
 // Components
-import Home from '../pages/Home/Home';
-import News from '../pages/News/News';
-import BoHome from '../pages/BoHome/BoHome';
-import BoConcerts from '../pages/BoConcerts/BoConcerts';
-import BoConcertsForm from '../pages/BoConcertsForm/BoConcertsForm';
-import BoNews from '../pages/BoNews/BoNews';
-import BoNewsForm from '../pages/BoNewsForm/BoNewsForm';
-import BoCarousel from '../pages/BoCarousel/BoCarousel';
+// Lazy load components
+const Home = lazy(() => import('../pages/Home/Home'));
+const News = lazy(() => import('../pages/News/News'));
+const BoHome = lazy(() => import('../pages/BoHome/BoHome'));
+const BoConcerts = lazy(() => import('../pages/BoConcerts/BoConcerts'));
+const BoConcertsForm = lazy(() => import('../pages/BoConcertsForm/BoConcertsForm'));
+const BoNews = lazy(() => import('../pages/BoNews/BoNews'));
+const BoNewsForm = lazy(() => import('../pages/BoNewsForm/BoNewsForm'));
+const BoCarousel = lazy(() => import('../pages/BoCarousel/BoCarousel'));
+const LoginPage = lazy(() => import('../pages/LoginPage/LoginPage'));
 
 // Styles
 import './App.scss';
@@ -54,30 +57,33 @@ function App() {
         <meta property="og:description" content={ogDescription} />
       </Helmet>
       <div className="App">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/admin" element={<BoHome />} />
-          <Route path="/admin/concerts" element={<BoConcerts />} />
-          <Route
-            path="/admin/concerts/add"
-            element={<BoConcertsForm type="add" title="Add concert" />}
-          />
-          <Route
-            path="/admin/concerts/edit/:id"
-            element={<BoConcertsForm type="edit" title="Edit concert" />}
-          />
-          <Route path="/admin/news" element={<BoNews />} />
-          <Route
-            path="/admin/news/add"
-            element={<BoNewsForm type="add" title="Add news" />}
-          />
-          <Route
-            path="/admin/news/edit/:id"
-            element={<BoNewsForm type="edit" title="Edit news" />}
-          />
-          <Route path="/admin/carousel" element={<BoCarousel />} />
-        </Routes>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/admin" element={<BoHome />} />
+            <Route path="/admin/concerts" element={<BoConcerts />} />
+            <Route
+              path="/admin/concerts/add"
+              element={<BoConcertsForm type="add" title="Add concert" />}
+            />
+            <Route
+              path="/admin/concerts/edit/:id"
+              element={<BoConcertsForm type="edit" title="Edit concert" />}
+            />
+            <Route path="/admin/news" element={<BoNews />} />
+            <Route
+              path="/admin/news/add"
+              element={<BoNewsForm type="add" title="Add news" />}
+            />
+            <Route
+              path="/admin/news/edit/:id"
+              element={<BoNewsForm type="edit" title="Edit news" />}
+            />
+            <Route path="/admin/carousel" element={<BoCarousel />} />
+          </Routes>
+        </Suspense>
       </div>
     </>
   );
