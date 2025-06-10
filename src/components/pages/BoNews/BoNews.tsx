@@ -1,7 +1,7 @@
 // Dependencies
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 // React-icons
 import { FaTrashAlt } from 'react-icons/fa';
@@ -21,7 +21,6 @@ import { AppDispatch } from '../../../store';
 
 // Subcomponents
 import BoHeader from '../../organisms/BoHeader/BoHeader';
-import LoginForm from '../../organisms/LoginForm/LoginForm';
 import ConfirmBox from '../../organisms/ConfirmBox/ConfirmBox';
 
 // Styles
@@ -62,6 +61,10 @@ const BoNews = () => {
       window.removeEventListener('click', handleClick);
     };
   }, [isRemoveBoxDisplayed, dispatch]);
+
+  if (!isLogged) {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <>
@@ -115,7 +118,6 @@ const BoNews = () => {
           </tbody>
         </table>
       </main>
-      {!isLogged && <LoginForm />}
     </>
   );
 };

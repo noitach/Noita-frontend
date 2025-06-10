@@ -1,6 +1,7 @@
 // Dependencies
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 
 // Redux actions
 import { fetchCarouselPictures } from '../../../actions/carousel/carouselActions';
@@ -10,7 +11,6 @@ import { RootState } from '../../../reducers/indexReducer';
 
 // Subcomponents
 import BoHeader from '../../organisms/BoHeader/BoHeader';
-import LoginForm from '../../organisms/LoginForm/LoginForm';
 import BoCarouselCard from './BoCarouselCard/BoCarouselCard';
 import BoCarouselEmptyCard from './BoCarouselEmptyCard/BoCarouselEmptyCard';
 import FailureMessages from '../../organisms/FailureMessages/FailureMessages';
@@ -41,6 +41,10 @@ const BoCarousel = () => {
     dispatch(fetchCarouselPictures());
   }, [dispatch]);
 
+  if (!isLogged) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <>
       <BoHeader />
@@ -70,7 +74,6 @@ const BoCarousel = () => {
           <BoCarouselEmptyCard />
         </div>
       </main>
-      {!isLogged && <LoginForm />}
     </>
   );
 };
