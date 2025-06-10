@@ -11,8 +11,8 @@ export interface News {
   content_fr: string;
   content_de: string;
   image_url: string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface StoreNewsList {

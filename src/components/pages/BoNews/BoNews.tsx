@@ -91,7 +91,7 @@ const BoNews = () => {
                   {oneNews.title_fr}
                 </td>
                 <td className="BoNews-table-body-row-cell">
-                  {oneNews.createdAt ? oneNews.createdAt.slice(0, 10) : 'N/A'}
+                  {oneNews.created_at ? oneNews.created_at.slice(0, 10) : 'N/A'}
                 </td>
                 <td className="BoNews-table-body-row-cell actions">
                   <Link

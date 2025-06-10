@@ -63,7 +63,9 @@ const newsMiddleware =
                 }
                 throw new Error(error.errors.join(', '));
               }
-              const data: News = await response.json();
+              const responseData = await response.json();
+              // Handle both direct news object and object with data property
+              const data: News = responseData.data ? responseData.data : responseData;
               store.dispatch(storeNewsDetails(data));
             } catch (error: unknown) {
               console.error(error);
@@ -114,6 +116,14 @@ const newsMiddleware =
               const form: NewsForm = store.getState().news.form;
               const news_id: number | undefined =
                 store.getState().news.newsDetails?.id;
+
+              // Validate that news_id exists before making the request
+              if (!news_id) {
+                const errorMessage = 'News ID is missing. Cannot update news.';
+                console.error(errorMessage);
+                store.dispatch(newsFailure([errorMessage]));
+                return next(action);
+              }
 
               const response: Response = await fetch(
                 `/api/posts/${news_id}?user_id=${user_id}`,

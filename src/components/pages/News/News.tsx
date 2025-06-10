@@ -50,7 +50,7 @@ const News = () => {
 
         {newsArray.map((post) => {
           // Adapt date format for French and German
-          const dateObj = new Date(post.createdAt);
+          const dateObj = new Date(post.created_at);
           const dayDe = dateObj.getDate();
           const dayFr = String(dayDe).padStart(2, '0');
           const monthDe = dateObj.getMonth() + 1;
