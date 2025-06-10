@@ -77,6 +77,15 @@ const concertsMiddleware =
               const token: string = store.getState().login.token;
               const form: ConcertForm = store.getState().concerts.form;
 
+              // Transform form data to match backend expected field names
+              const requestBody = {
+                city: form.city,
+                event_date: form.eventDate,
+                venue: form.venue,
+                event_name: form.eventName,
+                event_url: form.link,
+              };
+
               const response: Response = await fetch(
                 `/api/concerts?user_id=${user_id}`,
                 {
@@ -85,7 +94,7 @@ const concertsMiddleware =
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
                   },
-                  body: JSON.stringify(form),
+                  body: JSON.stringify(requestBody),
                 },
               );
               if (!response.ok) {
@@ -123,6 +132,15 @@ const concertsMiddleware =
                 return next(action);
               }
 
+              // Transform form data to match backend expected field names
+              const requestBody = {
+                city: form.city,
+                event_date: form.eventDate,
+                venue: form.venue,
+                event_name: form.eventName,
+                event_url: form.link,
+              };
+
               const response: Response = await fetch(
                 `/api/concerts/${concert_id}?user_id=${user_id}`,
                 {
@@ -131,7 +149,7 @@ const concertsMiddleware =
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
                   },
-                  body: JSON.stringify(form),
+                  body: JSON.stringify(requestBody),
                 },
               );
               if (!response.ok) {
