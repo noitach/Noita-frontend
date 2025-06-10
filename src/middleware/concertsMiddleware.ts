@@ -115,6 +115,14 @@ const concertsMiddleware =
               const concert_id: number | undefined =
                 store.getState().concerts.concertDetails?.id;
 
+              // Validate that concert_id exists before making the request
+              if (!concert_id) {
+                const errorMessage = 'Concert ID is missing. Cannot update concert.';
+                console.error(errorMessage);
+                store.dispatch(concertFailure([errorMessage]));
+                return next(action);
+              }
+
               const response: Response = await fetch(
                 `/api/concerts/${concert_id}?user_id=${user_id}`,
                 {
