@@ -83,15 +83,32 @@ const carouselMiddleware =
               const token: string = store.getState().login.token;
               const picture_id: number = action.pictureId;
 
-              const response: Response = await fetch(
-                `/api/carousel/${picture_id}?user_id=${user_id}`,
-                {
-                  method: 'DELETE',
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
+              console.log('DELETE picture - user_id:', user_id, 'picture_id:', picture_id, 'token length:', token?.length);
+
+              const url = `/api/carousel/${picture_id}?user_id=${user_id}`;
+              console.log('DELETE request URL:', url);
+              console.log('DELETE request headers:', {
+                Authorization: `Bearer ${token}`,
+              });
+
+              const response: Response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                  Authorization: `Bearer ${token}`,
                 },
-              );
+              });
+
+              console.log('DELETE response status:', response.status);
+              console.log('DELETE response headers:', response.headers);
+
+              // Check if the response is HTML instead of JSON
+              const contentType = response.headers.get('content-type');
+              if (contentType && contentType.includes('text/html')) {
+                console.error('Received HTML response instead of JSON - this suggests the request is not reaching the backend');
+                const htmlText = await response.text();
+                console.error('HTML response:', htmlText.substring(0, 200) + '...');
+                throw new Error('Request not reaching backend - received HTML response');
+              }
               if (!response.ok) {
                 const error: ErrorResponse = await response.json();
                 if (error.status === 401) {
