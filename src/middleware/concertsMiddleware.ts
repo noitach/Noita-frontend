@@ -22,9 +22,7 @@ const concertsMiddleware =
     switch (action.type) {
       case ConcertActionsEnum.FETCH_CONCERT_LIST: {
         try {
-          const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/concerts`,
-          );
+          const response: Response = await fetch(`/api/concerts`);
 
           if (!response.ok) {
             const error: ErrorResponse = await response.json();
@@ -45,7 +43,7 @@ const concertsMiddleware =
           const concert_id: number = action.concertId;
 
           const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/concerts/${concert_id}?user_id=${user_id}`,
+            `/api/concerts/${concert_id}?user_id=${user_id}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -78,7 +76,7 @@ const concertsMiddleware =
           const form: ConcertForm = store.getState().concerts.form;
 
           const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/concerts?user_id=${user_id}`,
+            `/api/concerts?user_id=${user_id}`,
             {
               method: 'POST',
               headers: {
@@ -116,7 +114,7 @@ const concertsMiddleware =
             store.getState().concerts.concertDetails?.id;
 
           const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/concerts/${concert_id}?user_id=${user_id}`,
+            `/api/concerts/${concert_id}?user_id=${user_id}`,
             {
               method: 'PUT',
               headers: {
@@ -152,7 +150,7 @@ const concertsMiddleware =
           const concert_id: number = action.concertId;
 
           const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/concerts/${concert_id}?user_id=${user_id}`,
+            `/api/concerts/${concert_id}?user_id=${user_id}`,
             {
               method: 'DELETE',
               headers: {

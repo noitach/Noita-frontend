@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@redux-devtools/extension": "^3.3.0",
+    "firebase": "^11.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet": "^6.1.0",
@@ -43,6 +44,6 @@
     "prettier": "^3.3.3",
     "sass": "^1.77.8",
     "typescript": "^5.6.3",
-    "vite": "^5.4.1"
+    "vite": "^6.3.5"
   }
 }

@@ -23,9 +23,7 @@ const carouselMiddleware =
     switch (action.type) {
       case CarouselActionsEnum.FETCH_CAROUSEL_PICTURES: {
         try {
-          const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/carousel`,
-          );
+          const response: Response = await fetch(`/api/carousel`);
 
           if (!response.ok) {
             const error: ErrorResponse = await response.json();
@@ -46,7 +44,7 @@ const carouselMiddleware =
           const picture64: string = store.getState().carousel.pictureInput;
 
           const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/carousel?user_id=${user_id}`,
+            `/api/carousel?user_id=${user_id}`,
             {
               method: 'POST',
               headers: {
@@ -84,7 +82,7 @@ const carouselMiddleware =
           const picture_id: number = action.pictureId;
 
           const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/carousel/${picture_id}?user_id=${user_id}`,
+            `/api/carousel/${picture_id}?user_id=${user_id}`,
             {
               method: 'DELETE',
               headers: {
@@ -123,7 +121,7 @@ const carouselMiddleware =
           const pictureId: number = action.pictureId;
 
           const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/carousel/${pictureId}?user_id=${user_id}`,
+            `/api/carousel/${pictureId}?user_id=${user_id}`,
             {
               method: 'PUT',
               headers: {
@@ -163,7 +161,7 @@ const carouselMiddleware =
           const direction: 'left' | 'right' = action.direction;
 
           const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/carousel/position/${pictureId}?user_id=${user_id}`,
+            `/api/carousel/position/${pictureId}?user_id=${user_id}`,
             {
               method: 'PUT',
               headers: {

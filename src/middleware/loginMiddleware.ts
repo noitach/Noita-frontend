@@ -5,18 +5,9 @@ import { loginSuccess, loginFailure } from '../actions/login/loginActions';
 import { Dispatch } from 'redux';
 import { LoginActionsEnum } from '../actions/actionsIndex';
 import { LoginAction } from '../actions/login/loginActionTypes';
-import { ErrorResponse } from './middlewareTypes';
 import { AppStore } from '../store';
-
-// Local types
-interface LoginResponse {
-  message: string;
-  admin: {
-    id: number;
-    username: string;
-  };
-  token: string;
-}
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 
 const loginMiddleware =
   (store: AppStore) =>
@@ -25,28 +16,21 @@ const loginMiddleware =
     switch (action.type) {
       case LoginActionsEnum.POST_LOGIN_FORM: {
         try {
-          const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/admin/login`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                username: store.getState().login.usernameInput,
-                password: store.getState().login.passwordInput,
-              }),
-            },
+          const email = store.getState().login.usernameInput;
+          const password = store.getState().login.passwordInput;
+          const userCredential = await signInWithEmailAndPassword(
+            auth,
+            email,
+            password,
           );
-          if (!response.ok) {
-            const error: ErrorResponse = await response.json();
-            store.dispatch(loginFailure(error.errors));
-            throw new Error(error.errors.join(', '));
-          }
-          const data: LoginResponse = await response.json();
-          store.dispatch(loginSuccess(data.admin.id, data.token));
-        } catch (error: unknown) {
-          console.error(error);
+          const user = userCredential.user;
+          const token = await user.getIdToken();
+          store.dispatch(loginSuccess(1, token));
+        } catch (error: any) {
+          const errorMessage = error.message
+            ? [error.message]
+            : ['Login failed.'];
+          store.dispatch(loginFailure(errorMessage));
         }
         break;
       }

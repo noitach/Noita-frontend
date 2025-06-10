@@ -22,9 +22,7 @@ const newsMiddleware =
     switch (action.type) {
       case NewsActionsEnum.FETCH_NEWS_LIST: {
         try {
-          const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/posts`,
-          );
+          const response: Response = await fetch(`/api/posts`);
 
           if (!response.ok) {
             const error: ErrorResponse = await response.json();
@@ -45,7 +43,7 @@ const newsMiddleware =
           const news_id: number = action.newsId;
 
           const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/posts/${news_id}?user_id=${user_id}`,
+            `/api/posts/${news_id}?user_id=${user_id}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -78,7 +76,7 @@ const newsMiddleware =
           const form: NewsForm = store.getState().news.form;
 
           const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/posts?user_id=${user_id}`,
+            `/api/posts?user_id=${user_id}`,
             {
               method: 'POST',
               headers: {
@@ -116,7 +114,7 @@ const newsMiddleware =
             store.getState().news.newsDetails?.id;
 
           const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/posts/${news_id}?user_id=${user_id}`,
+            `/api/posts/${news_id}?user_id=${user_id}`,
             {
               method: 'PUT',
               headers: {
@@ -152,7 +150,7 @@ const newsMiddleware =
           const news_id: number = action.newsId;
 
           const response: Response = await fetch(
-            `${import.meta.env.VITE_API_URL}/posts/${news_id}?user_id=${user_id}`,
+            `/api/posts/${news_id}?user_id=${user_id}`,
             {
               method: 'DELETE',
               headers: {

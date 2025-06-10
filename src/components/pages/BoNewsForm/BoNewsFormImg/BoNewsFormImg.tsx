@@ -34,7 +34,7 @@ const BoNewsFormImg = () => {
   const isEdit = location.pathname.includes('edit');
   let imgToDisplay;
   if (isEdit && formInputs.img64 === '') {
-    imgToDisplay = `${import.meta.env.VITE_API_URL}/../${imgUrl}`;
+    imgToDisplay = `${imgUrl}`;
   } else {
     imgToDisplay = formInputs.img64 ? formInputs.img64 : placeholder;
   }

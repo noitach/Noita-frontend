@@ -1,10 +1,10 @@
 // Dependencies
 import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 
 // Subcomponents
 import BoHeader from '../../organisms/BoHeader/BoHeader';
 import BoHomeBtn from './BoHomeBtn/BoHomeBtn';
-import LoginForm from '../../organisms/LoginForm/LoginForm';
 
 // Types
 import { RootState } from '../../../reducers/indexReducer';
@@ -19,6 +19,10 @@ import './BoHome.scss';
 
 const BoHome = () => {
   const isLogged = useSelector((state: RootState) => state.login.isLogged);
+
+  if (!isLogged) {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <>
@@ -36,7 +40,6 @@ const BoHome = () => {
         />
         <BoHomeBtn title="News" icon={<BsPostcard />} link="/admin/news" />
       </main>
-      {!isLogged && <LoginForm />}
     </>
   );
 };

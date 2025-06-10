@@ -1,0 +1,56 @@
+services:
+  backend:
+    image: europe-west1-docker.pkg.dev/noita-website/noita-website/noita-backend:latest
+    pull_policy: always
+    environment:
+      - DB_SSL=false
+      - DB_HOST=db
+      - SERVER_PORT=8080
+      - DB_PASS=mysecretpassword
+      - DB_USER=postgres
+      - DB_NAME=postgres
+    networks:
+      - client-side
+      - server-side
+    ports:
+      - 8080:8080
+    volumes:
+      - $PWD/fixtures/images:/app/public/images
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+
+  db:
+    image: postgres:17-alpine
+    restart: always
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+    networks:
+      - server-side
+    volumes:
+      - $PWD/fixtures/sql:/docker-entrypoint-initdb.d:ro
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    networks:
+      - server-side
+    ports:
+      - 8090:8080
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+
+networks:
+  client-side: {}
+  server-side: {}
