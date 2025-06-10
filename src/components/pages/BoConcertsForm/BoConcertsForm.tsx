@@ -1,7 +1,7 @@
 // Dependencies
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 
 // Subcomponents
 import BoHeader from '../../organisms/BoHeader/BoHeader';
@@ -54,6 +54,11 @@ const BoConcertsForm: (props: {
   const concertDetails = useSelector(
     (state: RootState) => state.concerts.concertDetails,
   );
+
+  // Redirect to login if not authenticated
+  if (!isLogged) {
+    return <Navigate to="/login" replace />;
+  }
 
   // Search url params to fetch news details for editing
   useEffect(() => {
