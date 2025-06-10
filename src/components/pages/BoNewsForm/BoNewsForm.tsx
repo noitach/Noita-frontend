@@ -71,10 +71,35 @@ const BoNewsForm: (props: {
     }
   }, [type, newsDetails, dispatch]);
 
-  // If newsDetails is not fetched yet we don't display the form
+  // Handle navigation if newsDetails failed to load in edit mode
+  useEffect(() => {
+    if (type === 'edit' && isLogged) {
+      const url = window.location.href;
+      const newsId = Number(url.split('/').pop());
+      // If we have a valid newsId but newsDetails is still null after a delay,
+      // it means the fetch failed or the news doesn't exist
+      if (newsId) {
+        const timer = setTimeout(() => {
+          if (newsDetails === null) {
+            navigate('/admin/news');
+          }
+        }, 2000); // Give 2 seconds for the API call to complete
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [type, isLogged, newsDetails, navigate]);
+
+  // Don't render the form if we're in edit mode but don't have newsDetails yet
   if (type === 'edit' && newsDetails === null) {
-    navigate('/admin/concerts');
-    return;
+    return (
+      <>
+        <BoHeader />
+        <main className="BoNewsForm">
+          <p>Loading...</p>
+        </main>
+        {!isLogged && <LoginForm />}
+      </>
+    );
   }
 
   return (
@@ -106,7 +131,7 @@ const BoNewsForm: (props: {
             className="BoNewsForm-form-input"
             placeholder="ex. Galotti Bandnacht, on arrive !"
             required
-            value={formInputs.titleFr}
+            value={formInputs.titleFr || ''}
             onChange={(e) => {
               dispatch(changeNewsInput(e.target.value, 'titleFr'));
             }}
@@ -120,7 +145,7 @@ const BoNewsForm: (props: {
             className="BoNewsForm-form-input"
             placeholder="ex. Galotti Bandnacht, wir kommen !"
             required
-            value={formInputs.titleDe}
+            value={formInputs.titleDe || ''}
             onChange={(e) => {
               dispatch(changeNewsInput(e.target.value, 'titleDe'));
             }}
@@ -133,7 +158,7 @@ const BoNewsForm: (props: {
             className="BoNewsForm-form-textarea"
             placeholder="ex. Répétition générale aujourd'hui, il fait chaud..."
             required
-            value={formInputs.contentFr}
+            value={formInputs.contentFr || ''}
             onChange={(e) => {
               dispatch(changeNewsInput(e.target.value, 'contentFr'));
             }}
@@ -146,7 +171,7 @@ const BoNewsForm: (props: {
             className="BoNewsForm-form-textarea"
             placeholder="ex. Generalprobe heute. Es wird heisst unter der..."
             required
-            value={formInputs.contentDe}
+            value={formInputs.contentDe || ''}
             onChange={(e) => {
               dispatch(changeNewsInput(e.target.value, 'contentDe'));
             }}

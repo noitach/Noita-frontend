@@ -1,7 +1,8 @@
 services:
   backend:
-    image: europe-west1-docker.pkg.dev/noita-website/noita-website/noita-backend:latest
+    image: europe-west1-docker.pkg.dev/noita-website/docker/noita-backend:latest
     pull_policy: always
+    platform: linux/amd64
     environment:
       - DB_SSL=false
       - DB_HOST=db
@@ -25,7 +26,7 @@ services:
     image: postgres:17-alpine
     restart: always
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       retries: 5
       start_period: 10s

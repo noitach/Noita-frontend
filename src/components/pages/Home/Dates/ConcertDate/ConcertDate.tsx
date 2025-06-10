@@ -40,8 +40,8 @@ const ConcertDate: (props: {
           <div className="ConcertDate-link-info-date">
             {language === 'fr' ? dateFr : dateDe}
           </div>
-          <div className="ConcertDate-link-info-place">{place}</div>
-          <div className="ConcertDate-link-info-event">{event}</div>
+          <div className="ConcertDate-link-info-place">{place || 'Venue TBD'}</div>
+          <div className="ConcertDate-link-info-event">{event || 'Event TBD'}</div>
         </div>
         <div className="ConcertDate-link-city">{city}</div>
       </Link>

@@ -32,7 +32,9 @@ const BoCarousel = () => {
     (state: RootState) => state.carousel.failureMessages,
   );
 
-  const pictureNumber = pictures.length;
+  // Ensure pictures is an array
+  const picturesArray = Array.isArray(pictures) ? pictures : [];
+  const pictureNumber = picturesArray.length;
 
   // Fetch carousel pictures
   useEffect(() => {
@@ -47,7 +49,7 @@ const BoCarousel = () => {
           <FailureMessages failureMessages={failureMessages} />
         )}
         <div className="BoCarousel-cards">
-          {pictures?.map((picture) => {
+          {picturesArray.map((picture) => {
             let position;
             if (picture.position === 1) {
               position = 'first';

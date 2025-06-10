@@ -40,6 +40,9 @@ const BoConcerts = () => {
     (state: RootState) => state.concerts,
   );
 
+  // Ensure concerts is an array
+  const concertsArray = Array.isArray(concerts) ? concerts : [];
+
   // Fetch concert list
   useEffect(() => {
     dispatch(fetchConcertList());
@@ -80,7 +83,7 @@ const BoConcerts = () => {
             </tr>
           </thead>
           <tbody className="BoConcerts-table-body">
-            {concerts?.map((concert) => (
+            {concertsArray.map((concert) => (
               <tr key={concert.id} className="BoConcerts-table-body-row">
                 <td className="BoConcerts-table-body-row-cell">{concert.id}</td>
                 <td className="BoConcerts-table-body-row-cell">

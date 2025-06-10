@@ -40,6 +40,9 @@ const BoNews = () => {
   );
   const removeBoxId = useSelector((state: RootState) => state.news.removeBoxId);
 
+  // Ensure news is an array
+  const newsArray = Array.isArray(news) ? news : [];
+
   // Fetch news list
   useEffect(() => {
     dispatch(fetchNewsList());
@@ -78,14 +81,14 @@ const BoNews = () => {
             </tr>
           </thead>
           <tbody className="BoNews-table-body">
-            {news?.map((oneNews) => (
+            {newsArray.map((oneNews) => (
               <tr key={oneNews.id} className="BoNews-table-body-row">
                 <td className="BoNews-table-body-row-cell">{oneNews.id}</td>
                 <td className="BoNews-table-body-row-cell">
                   {oneNews.title_fr}
                 </td>
                 <td className="BoNews-table-body-row-cell">
-                  {oneNews.createdAt.slice(0, 10)}
+                  {oneNews.createdAt ? oneNews.createdAt.slice(0, 10) : 'N/A'}
                 </td>
                 <td className="BoNews-table-body-row-cell actions">
                   <Link

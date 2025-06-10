@@ -64,7 +64,7 @@ const BoConcertsForm: (props: {
     }
   }, [isLogged, type, dispatch]);
 
-  // Form pre-filling with news details for editing
+  // Form pre-filling with concert details for editing
   useEffect(() => {
     if (type === 'edit' && concertDetails) {
       dispatch(changeConcertInput(concertDetails.city, 'city'));
@@ -75,10 +75,35 @@ const BoConcertsForm: (props: {
     }
   }, [type, concertDetails, dispatch]);
 
-  // If we are not logged in, we display the login form
+  // Handle navigation if concertDetails failed to load in edit mode
+  useEffect(() => {
+    if (type === 'edit' && isLogged) {
+      const url = window.location.href;
+      const concertId = Number(url.split('/').pop());
+      // If we have a valid concertId but concertDetails is still null after a delay,
+      // it means the fetch failed or the concert doesn't exist
+      if (concertId) {
+        const timer = setTimeout(() => {
+          if (concertDetails === null) {
+            navigate('/admin/concerts');
+          }
+        }, 2000); // Give 2 seconds for the API call to complete
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [type, isLogged, concertDetails, navigate]);
+
+  // Don't render the form if we're in edit mode but don't have concertDetails yet
   if (type === 'edit' && concertDetails === null) {
-    navigate('/admin/concerts');
-    return;
+    return (
+      <>
+        <BoHeader />
+        <main className="BoConcertsForm">
+          <p>Loading...</p>
+        </main>
+        {!isLogged && <LoginForm />}
+      </>
+    );
   }
 
   return (
@@ -110,7 +135,7 @@ const BoConcertsForm: (props: {
             className="BoConcertsForm-form-input"
             placeholder="ex. Andermatt"
             required
-            value={formInputs.city}
+            value={formInputs.city || ''}
             onChange={(e) => {
               dispatch(changeConcertInput(e.target.value, 'city'));
             }}
@@ -123,7 +148,7 @@ const BoConcertsForm: (props: {
             id="eventDate"
             className="BoConcertsForm-form-input"
             required
-            value={formInputs.eventDate}
+            value={formInputs.eventDate || ''}
             onChange={(e) => {
               dispatch(changeConcertInput(e.target.value, 'eventDate'));
             }}
@@ -136,7 +161,7 @@ const BoConcertsForm: (props: {
             id="venue"
             className="BoConcertsForm-form-input"
             placeholder="ex. Papiersaal"
-            value={formInputs.venue}
+            value={formInputs.venue || ''}
             onChange={(e) => {
               dispatch(changeConcertInput(e.target.value, 'venue'));
             }}
@@ -149,7 +174,7 @@ const BoConcertsForm: (props: {
             id="eventName"
             className="BoConcertsForm-form-input"
             placeholder="ex. Vertanzt Festival"
-            value={formInputs.eventName}
+            value={formInputs.eventName || ''}
             onChange={(e) => {
               dispatch(changeConcertInput(e.target.value, 'eventName'));
             }}
@@ -163,7 +188,7 @@ const BoConcertsForm: (props: {
             className="BoConcertsForm-form-input"
             required
             placeholder="ex. https://www.vertanzt.ch/"
-            value={formInputs.link}
+            value={formInputs.link || ''}
             onChange={(e) => {
               dispatch(changeConcertInput(e.target.value, 'link'));
             }}

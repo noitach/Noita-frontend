@@ -37,6 +37,9 @@ const News = () => {
     dispatch(fetchNewsList());
   }, [dispatch]);
 
+  // Ensure news is an array
+  const newsArray = Array.isArray(news) ? news : [];
+
   return (
     <>
       <Header />
@@ -45,7 +48,7 @@ const News = () => {
           {language === 'fr' ? 'Actualités' : 'News'}
         </h2>
 
-        {news.map((post) => {
+        {newsArray.map((post) => {
           // Adapt date format for French and German
           const dateObj = new Date(post.createdAt);
           const dayDe = dateObj.getDate();

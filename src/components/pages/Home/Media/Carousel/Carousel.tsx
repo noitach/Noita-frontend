@@ -32,7 +32,10 @@ const Carousel = () => {
     dispatch(fetchCarouselPictures());
   }, [dispatch]);
 
-  const images = pictures.map((picture) => {
+  // Ensure pictures is an array
+  const pictureArray = Array.isArray(pictures) ? pictures : [];
+
+  const images = pictureArray.map((picture) => {
     return {
       original: `${picture.url}`,
     };
@@ -41,7 +44,8 @@ const Carousel = () => {
   // Toggle fullscreen mode and autoplay when clicking on the gallery
   const handleGalleryClick = () => {
     if (galleryRef.current) {
-      galleryRef.current.toggleFullScreen();
+      // Type assertion to work around TypeScript definition issue
+      (galleryRef.current as any).toggleFullScreen();
       setIsFullscreen(!isFullscreen);
       const newIsFullscreen = !isFullscreen;
       newIsFullscreen ? galleryRef.current.pause() : galleryRef.current.play();

@@ -30,12 +30,15 @@ const Dates = () => {
     dispatch(fetchConcertList());
   }, [dispatch]);
 
+  // Ensure concerts is an array
+  const concertArray = Array.isArray(concerts) ? concerts : [];
+
   // Sort concerts in 2 arrays: upcoming and past
-  let upcomingConcerts = concerts.filter((concert) => {
+  let upcomingConcerts = concertArray.filter((concert) => {
     const concertDate = new Date(concert.event_date);
     return concertDate > new Date();
   });
-  const pastConcerts = concerts.filter((concert) => {
+  const pastConcerts = concertArray.filter((concert) => {
     const concertDate = new Date(concert.event_date);
     return concertDate < new Date();
   });
