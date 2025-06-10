@@ -63,7 +63,9 @@ const concertsMiddleware =
                 }
                 throw new Error(error.errors.join(', '));
               }
-              const data: Concert = await response.json();
+              const responseData = await response.json();
+              // Handle both direct concert object and object with data property
+              const data: Concert = responseData.data ? responseData.data : responseData;
               store.dispatch(storeConcertDetails(data));
             } catch (error: unknown) {
               console.error(error);

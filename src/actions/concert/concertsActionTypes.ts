@@ -12,8 +12,8 @@ export interface Concert {
   venue: string;
   event_name: string;
   event_url: string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface StoreConcertList {
