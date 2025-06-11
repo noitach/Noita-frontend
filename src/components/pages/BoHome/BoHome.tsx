@@ -29,7 +29,7 @@ const BoHome = () => {
       <BoHeader />
       <main className="BoHome">
         <BoHomeBtn
-          title="Carousel!"
+          title="Carousel"
           icon={<RiCarouselView />}
           link="/admin/carousel"
         />
