@@ -137,6 +137,14 @@ const newsMiddleware =
             return next(action);
           }
 
+          const requestBody = {
+            title_fr: form.titleFr,
+            title_de: form.titleDe,
+            content_fr: form.contentFr,
+            content_de: form.contentDe,
+            img64: form.img64,
+          };
+
           const response: Response = await fetch(
             `/api/posts/${news_id}?user_id=${user_id}`,
             {
