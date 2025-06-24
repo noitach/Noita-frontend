@@ -7,6 +7,7 @@ export interface NewsForm {
   titleDe: string;
   contentFr: string;
   contentDe: string;
+  displayedDate: string;
   img64: string;
 }
 
@@ -29,6 +30,7 @@ export const initialState: NewsState = {
     titleDe: '',
     contentFr: '',
     contentDe: '',
+    displayedDate: '',
     img64: '',
   },
   failureMessages: [],

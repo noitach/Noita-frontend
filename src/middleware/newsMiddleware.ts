@@ -153,7 +153,7 @@ const newsMiddleware =
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
               },
-              body: JSON.stringify(form),
+              body: JSON.stringify(requestBody),
             },
           );
           if (!response.ok) {

@@ -43,7 +43,13 @@ export const hideRemoveBox = (): HideRemoveBox => {
 
 export const changeNewsInput = (
   value: string,
-  identifier: 'titleFr' | 'titleDe' | 'contentFr' | 'contentDe' | 'img64',
+  identifier:
+    | 'titleFr'
+    | 'titleDe'
+    | 'contentFr'
+    | 'contentDe'
+    | 'displayedDate'
+    | 'img64',
 ): ChangeNewsInput => {
   return {
     type: NewsActionsEnum.CHANGE_NEWS_INPUT,
