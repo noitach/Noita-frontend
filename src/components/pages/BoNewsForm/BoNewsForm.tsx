@@ -181,6 +181,19 @@ const BoNewsForm: (props: {
               dispatch(changeNewsInput(e.target.value, 'contentDe'));
             }}
           />
+          <label htmlFor="displayedDate" className="BoNewsForm-form-label">
+            Displayed date
+          </label>
+          <input
+            type="date"
+            id="displayedDate"
+            className="BoNewsForm-form-input"
+            required
+            value={formInputs.displayedDate || ''}
+            onChange={(e) => {
+              dispatch(changeNewsInput(e.target.value, 'displayedDate'));
+            }}
+          />
 
           <BoNewsFormImg />
 

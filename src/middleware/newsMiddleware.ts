@@ -88,6 +88,7 @@ const newsMiddleware =
             title_de: form.titleDe,
             content_fr: form.contentFr,
             content_de: form.contentDe,
+            displayed_date: form.displayedDate,
             img64: form.img64,
           };
 
@@ -142,6 +143,7 @@ const newsMiddleware =
             title_de: form.titleDe,
             content_fr: form.contentFr,
             content_de: form.contentDe,
+            displayed_date: form.displayedDate,
             img64: form.img64,
           };
 
@@ -153,7 +155,7 @@ const newsMiddleware =
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
               },
-              body: JSON.stringify(form),
+              body: JSON.stringify(requestBody),
             },
           );
           if (!response.ok) {

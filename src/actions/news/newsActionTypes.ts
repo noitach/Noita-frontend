@@ -10,6 +10,7 @@ export interface News {
   title_de: string;
   content_fr: string;
   content_de: string;
+  displayed_date: string;
   image_url: string;
   created_at: string;
   updated_at: string;
@@ -32,7 +33,13 @@ export interface HideRemoveBox {
 export interface ChangeNewsInput {
   type: typeof NewsActionsEnum.CHANGE_NEWS_INPUT;
   value: string;
-  identifier: 'titleFr' | 'titleDe' | 'contentFr' | 'contentDe' | 'img64';
+  identifier:
+    | 'titleFr'
+    | 'titleDe'
+    | 'contentFr'
+    | 'contentDe'
+    | 'displayedDate'
+    | 'img64';
 }
 
 export interface PostAddNewsForm {
